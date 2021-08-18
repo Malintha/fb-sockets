@@ -6,7 +6,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
-
+#include <iostream>
 #include "messages/states_generated.h"
 
 #define PORT     28500
@@ -20,12 +20,22 @@ int main() {
 
     // create a swarm object
     flatbuffers::FlatBufferBuilder builder;
-    auto position = Vec3(3.0f, 2.0f, 5.0f); 
+    auto position = Vec3(-20.0f, -10.0f, 5.0f); 
     auto id = 1;
     auto ag1 = CreateAgent(builder, &position,id);
+
+    position = Vec3(5.0f, -12.0f, 5.0f);     
+    id = 2;
+    auto ag2 = CreateAgent(builder, &position,id);
+
+    position = Vec3(0.0f,-20.0f, 5.0f);
+    id = 3;
+    auto ag3 = CreateAgent(builder, &position, id);
+
     std::vector<flatbuffers::Offset<Agent>> agents_vec;
     agents_vec.push_back(ag1);
-    agents_vec.push_back(ag1);
+    agents_vec.push_back(ag2);
+    agents_vec.push_back(ag3);
     auto agents = builder.CreateVector(agents_vec);
 
     auto swarm = CreateSwarm(builder, agents);
@@ -49,7 +59,7 @@ int main() {
     sendto(sockfd, builder.GetBufferPointer(), builder.GetSize(),
         MSG_CONFIRM, (const struct sockaddr *) &servaddr, 
         sizeof(servaddr));
-    printf("swarm size: %d ",builder.GetSize());
+    printf("swarm size: %d \n",builder.GetSize());
 
 
     char buffer[MAXLINE];
@@ -57,9 +67,13 @@ int main() {
         MSG_WAITALL, (struct sockaddr *) &servaddr,
         &len);
 
-    buffer[n_bytes] = '\0';
-    printf("\nServer : %s\n", buffer);
+    // buffer[n_bytes] = '\0';
 
+    char agent_data[n_bytes];
+    std::memcpy(agent_data, buffer, sizeof(agent_data));
+
+    // printf("\nServer : %d\n", );
+    printf("recieved: %d \n", sizeof(agent_data));
     close(sockfd);
     return 0;
 }
