@@ -25,44 +25,39 @@ int main() {
 
     auto position = Vec3(-20.0f, -10.0f, 5.0f); 
     auto id = 0;
-    auto ag = CreateAgent(builder, &position,id);
-    agents_vec.push_back(ag);
+    auto ag0 = CreateAgent(builder, &position,id);
 
     position = Vec3(5.0f, -12.0f, 5.0f);     
     id = 1;
-    ag = CreateAgent(builder, &position,id);
-    agents_vec.push_back(ag);
+    auto ag1 = CreateAgent(builder, &position,id);
 
     position = Vec3(0.0f,-20.0f, 5.0f);
     id = 2;
-    ag = CreateAgent(builder, &position, id);
-    agents_vec.push_back(ag);
+    auto ag2 = CreateAgent(builder, &position, id);
 
-// create ue nodes
     position = Vec3(14.0f, 8.0f, 0.0f);
     id = 3;
-    ag = CreateAgent(builder, &position, id);
-    agents_vec.push_back(ag);
+    auto ag3 = CreateAgent(builder, &position,id);
 
-    position = Vec3(23.0f,-20.0f, 0.0f);
+    position = Vec3(23.0f,-20.0f, 0.0f);    
     id = 4;
-    ag = CreateAgent(builder, &position, id);
-    agents_vec.push_back(ag);
-    
+    auto ag4 = CreateAgent(builder, &position,id);
+
     position = Vec3(-25.0f,-20.0f, 0.0f);
     id = 5;
-    ag = CreateAgent(builder, &position, id);
-    agents_vec.push_back(ag);
-    
+    auto ag5 = CreateAgent(builder, &position, id);
+
     position = Vec3(0.0f,3.0f, 0.0f);
     id = 6;
-    ag = CreateAgent(builder, &position, id);
-    agents_vec.push_back(ag);
-    
-    position = Vec3(-30.0f, 10.0f, 0.0f);
-    id = 7;
-    ag = CreateAgent(builder, &position, id);
-    // agents_vec.push_back(ag);
+    auto ag6 = CreateAgent(builder, &position,id);
+
+    agents_vec.push_back(ag0);
+    agents_vec.push_back(ag1);
+    agents_vec.push_back(ag2);
+    agents_vec.push_back(ag3);
+    agents_vec.push_back(ag4);
+    agents_vec.push_back(ag5);
+    agents_vec.push_back(ag6);
 
 
     auto agents = builder.CreateVector(agents_vec);
@@ -97,7 +92,6 @@ int main() {
         &len);
 
     // buffer[n_bytes] = '\0';
-    printf("recieved1: %d \n", n_bytes);
 
     char agent_data[n_bytes];
     std::memcpy(agent_data, buffer, sizeof(agent_data));
@@ -108,7 +102,7 @@ int main() {
     // deserialize recieved data
     auto neighborhoods_temp = GetNeighborhoods(agent_data);
     auto neighborhoods = neighborhoods_temp->neighborhood();
-    printf("neighborhoods: %d \t",neighborhoods->size());
+    printf("neighborhoods: %d \n",neighborhoods->size());
 
     for(int i=0;i<neighborhoods->size(); i++) {
         printf("id: %d \t",neighborhoods->Get(i)->id());
