@@ -8,6 +8,7 @@
 #include <netinet/in.h>
 #include <iostream>
 #include "messages/states_generated.h"
+#include "messages/neighborhoods_generated.h"
 
 #define PORT     28500
 #define MAXLINE 1024
@@ -74,6 +75,21 @@ int main() {
 
     // printf("\nServer : %d\n", );
     printf("recieved: %d \n", sizeof(agent_data));
+
+    // deserialize recieved data
+    auto neighborhoods_temp = GetNeighborhoods(agent_data);
+    auto neighborhoods = neighborhoods_temp->neighborhood();
+
+    for(int i=0;i<neighborhoods->size(); i++) {
+        printf("id: %d \t",neighborhoods->Get(i)->id());
+        const auto neighbors = neighborhoods->Get(i)->neighbors();
+        for(int j=0; j<neighbors->size(); j++) {
+            // auto id = neighbors->Get(j);
+            printf("%d ", neighbors->Get(j));
+        }
+        printf("\n");
+    }
+
     close(sockfd);
     return 0;
 }
