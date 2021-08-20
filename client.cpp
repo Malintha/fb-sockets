@@ -22,24 +22,45 @@ int main() {
     // create a swarm object
     flatbuffers::FlatBufferBuilder builder;
     auto position = Vec3(-20.0f, -10.0f, 5.0f); 
-    auto id = 1;
-    auto ag1 = CreateAgent(builder, &position,id);
+    auto id = 0;
+    auto ag0 = CreateAgent(builder, &position,id);
 
     position = Vec3(5.0f, -12.0f, 5.0f);     
-    id = 2;
-    auto ag2 = CreateAgent(builder, &position,id);
+    id = 1;
+    auto ag1 = CreateAgent(builder, &position,id);
 
     position = Vec3(0.0f,-20.0f, 5.0f);
+    id = 2;
+    auto ag2 = CreateAgent(builder, &position, id);
+
+    position = Vec3(14.0f, 8.0f, 0.0f);
     id = 3;
-    auto ag3 = CreateAgent(builder, &position, id);
+    auto ag3 = CreateAgent(builder, &position,id);
+
+    position = Vec3(23.0f,-20.0f, 0.0f);    
+    id = 4;
+    auto ag4 = CreateAgent(builder, &position,id);
+
+    position = Vec3(-25.0f,-20.0f, 0.0f);
+    id = 5;
+    auto ag5 = CreateAgent(builder, &position, id);
+
+    position = Vec3(0.0f,3.0f, 0.0f);
+    id = 6;
+    auto ag6 = CreateAgent(builder, &position,id);
 
     std::vector<flatbuffers::Offset<Agent>> agents_vec;
+    agents_vec.push_back(ag0);
     agents_vec.push_back(ag1);
     agents_vec.push_back(ag2);
     agents_vec.push_back(ag3);
+    agents_vec.push_back(ag4);
+    agents_vec.push_back(ag5);
+    agents_vec.push_back(ag6);
+
     auto agents = builder.CreateVector(agents_vec);
 
-    auto swarm = CreateSwarm(builder, agents);
+    auto swarm = CreateSwarm(builder, 3, agents);
     builder.Finish(swarm);
 
     // Creating socket file descriptor
